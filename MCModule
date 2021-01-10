@@ -1,0 +1,213 @@
+import com.sun.deploy.util.ArrayUtil;
+
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.lang.reflect.Array;
+import java.util.*;
+import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
+
+// TODO -  Fix screenshot dimensions, finish colors and then you're fuckin done!
+public class MineCraft extends main{
+     static void screenShot() throws AWTException, IOException, InterruptedException {
+         /// Decs. First slot is 770, 1904 is second slot,
+         Color[] potatoColors = new Color[3];
+         potatoColors[0] = new Color(214, 168, 80);
+         potatoColors[1] = new Color(152, 84, 0);
+         potatoColors[2] = new Color(155, 118, 45);
+         Color[] appleColors = new Color[3];
+         appleColors[0] = new Color(252, 28, 42);
+         appleColors[1] = new Color(218, 23, 37);
+         appleColors[2] = new Color(178, 19, 30);
+         Color[] ironColors = new Color[3];
+         ironColors[0] = new Color(119, 97, 81);
+         ironColors[1] = new Color(154, 131, 116);
+         ironColors[2] = new Color(147, 119, 100);
+         Color[] wheatColors = new Color[3];
+         ironColors[0] = new Color(119, 97, 81);
+         ironColors[1] = new Color(154, 131, 116);
+         ironColors[2] = new Color(147, 119, 100);
+         // Wheat - #d9b964, #8b763c, #cbaf58, #a49352
+         boolean startcode = true;
+         boolean mainCode = false;
+         ArrayList<String> itemNames = new ArrayList<>();
+         int amountSlotUsedTotal = 0;
+
+         while (startcode) {
+             // Setup
+             int itemAmountTotal = 0;
+             Scanner userInput = new Scanner(System.in);
+             System.out.println("Enter the item you want your slave to collect. Check the supported list of items for reference.");
+             String itemName = userInput.nextLine();
+             System.out.println("How many of said item do they need to collect? Maximum of 576, or 9 slots of use.");
+             int itemAmount = userInput.nextInt();
+             int amountSlotUsed = (int) Math.ceil((float) itemAmount / 64);
+             System.out.println(amountSlotUsed);
+             itemAmountTotal = itemAmountTotal + itemAmount;
+             amountSlotUsedTotal = amountSlotUsedTotal + amountSlotUsed;
+             for (int i = 0; i < amountSlotUsed; i++) {
+                 itemNames.add(itemName);
+                 System.out.println(itemNames);
+                 if (itemNames.size() >= 9) {
+                     break;
+                 }
+             }
+             if (itemAmountTotal >= 576) {
+                 System.out.println("Max amount of items reached. Starting....");
+                 startcode = false;
+                 mainCode = true;
+             }
+             if (amountSlotUsedTotal >= 9) {
+                 System.out.println("All slots used. Starting....");
+                 startcode = false;
+                 mainCode = true;
+
+             }
+         }
+         while (mainCode) {
+             Thread.sleep(2000);
+             // Color checker
+             int startingX = 780;
+             int startingY = 999;
+             Robot droid = new Robot();
+             Rectangle screenArea1 = new Rectangle();
+             screenArea1.setBounds(startingX, startingY, 360, 40);
+             BufferedImage screenCap = droid.createScreenCapture(screenArea1);
+             Color[] colorSet = new Color[15972];
+
+                 for (int y = 0 , totalPixels = 0; y < screenCap.getWidth(); y++) {
+                     for (int x = 0; x < screenCap.getHeight(); x++) {
+                         int c = screenCap.getRGB(y,x);
+                         Color color = new Color(c);
+                         colorSet[totalPixels] = color;
+                         totalPixels++;
+                     }
+                 }
+
+
+
+
+                 // Holy shit i cannot find a better way to do this without a long ass switch statement. It's efficient, but not readable.
+             Boolean[] slotState = new Boolean[9];
+             slotState[0] = false;
+             slotState[1] = false;
+             slotState[2] = false;
+             slotState[3] = false;
+             slotState[4] = false;
+             slotState[5] = false;
+             slotState[6] = false;
+             slotState[7] = false;
+             slotState[8] = false;
+                     for (int currentSlot = 0; currentSlot < 8; currentSlot++) {
+                         for (int i = 0; i < 14400; i++) {
+                             int nullCases = 0;
+                             int trueCount = 0;
+                             System.out.println(Arrays.toString(slotState));
+                             int randomNumColor = ThreadLocalRandom.current().nextInt(0, 2);
+                             switch (itemNames.get(currentSlot)) {
+                                 case "potato":
+                                     if (colorSet[i].equals(potatoColors[randomNumColor])) {
+                                         System.out.println("Found potato!");
+                                         if (i < 1600) { System.out.println("Potato in slot 1");slotState[0] = true;}
+                                         if (i > 1600 && i < 3200) { System.out.println("Potato in slot 2"); slotState[1] = true; }
+                                         if (i > 3200 && i < 4800) { System.out.println("Potato in slot 3");slotState[2] = true;}
+                                         if (i > 4800 && i < 6400) { System.out.println("Potato in slot 4");slotState[3] = true;}
+                                         if (i > 6400 && i < 8000) { System.out.println("Potato in slot 5");slotState[4] = true;}
+                                         if (i > 8000 && i < 9600) { System.out.println("Potato in slot 6");slotState[5] = true;}
+                                         if (i > 9600 && i < 11200) { System.out.println("Potato in slot 7");slotState[6] = true;}
+                                         if (i > 11200 && i < 12800) { System.out.println("Potato in slot 8");slotState[7] = true;}
+                                         if (i > 12800) { System.out.println("Potato in slot 9");slotState[8] = true;}
+                                         break;
+                                     }
+                                     break;
+                                 case "apple":
+                                     if (colorSet[i].equals(appleColors[randomNumColor])) {
+                                         System.out.println("Found potato!");
+                                         if (i < 1600) { System.out.println("Apple in slot 1");slotState[0] = true;}
+                                         if (i > 1600 && i < 3200) { System.out.println("Apple in slot 2"); slotState[1] = true; }
+                                         if (i > 3200 && i < 4800) { System.out.println("Apple in slot 3");slotState[2] = true;}
+                                         if (i > 4800 && i < 6400) { System.out.println("Apple in slot 4");slotState[3] = true;}
+                                         if (i > 6400 && i < 8000) { System.out.println("Apple in slot 5");slotState[4] = true;}
+                                         if (i > 8000 && i < 9600) { System.out.println("Apple in slot 6");slotState[5] = true;}
+                                         if (i > 9600 && i < 11200) { System.out.println("Apple in slot 7");slotState[6] = true;}
+                                         if (i > 11200 && i < 12800) { System.out.println("Apple in slot 8");slotState[7] = true;}
+                                         if (i > 12800) { System.out.println("Apple in slot 9");slotState[8] = true;}
+                                         break;
+                                     }
+                                     break;
+                                 case "iron ore":
+                                     if (colorSet[i].equals(ironColors[randomNumColor])) {
+                                         System.out.println("Found Iron ore!!");
+                                         if (i < 1600) { System.out.println("Iron Ore in slot 1");slotState[0] = true;}
+                                         if (i > 1600 && i < 3200) { System.out.println("Iron Ore in slot 2"); slotState[1] = true; }
+                                         if (i > 3200 && i < 4800) { System.out.println("Iron Ore in slot 3");slotState[2] = true;}
+                                         if (i > 4800 && i < 6400) { System.out.println("Iron Ore in slot 4");slotState[3] = true;}
+                                         if (i > 6400 && i < 8000) { System.out.println("Iron Ore in slot 5");slotState[4] = true;}
+                                         if (i > 8000 && i < 9600) { System.out.println("Iron Ore in slot 6");slotState[5] = true;}
+                                         if (i > 9600 && i < 11200) { System.out.println("Iron Ore in slot 7");slotState[6] = true;}
+                                         if (i > 11200 && i < 12800) { System.out.println("Iron Ore in slot 8");slotState[7] = true;}
+                                         if (i > 12800) { System.out.println("Iron Ore in slot 9");slotState[8] = true;}
+                                         break;
+                                     }
+                                     break;
+                             }
+                             for (int ii = 0; ii < slotState.length; ii++) {
+                                 if (slotState[ii] == true) {
+                                     trueCount++;
+                                     System.out.println(Arrays.toString(slotState));
+                                 }
+                             }
+                             for (int iii = 0; iii < itemNames.size(); iii++) {
+                                 if (itemNames.get(iii).equals("null")) {
+                                     nullCases++;
+                                 }
+                             }
+
+                             System.out.println("count: " + trueCount);
+                             System.out.println(Arrays.toString(slotState));
+                             System.out.println(nullCases);
+                             if (trueCount >= 9 - nullCases) {
+                                 System.out.println("Task completed!");
+                                 System.exit(1);
+                             }
+                         }
+                     }
+
+
+         }
+     }
+    }
+         // Check for slot that contains x resource. Check amount of resources and compare to userdef resource amount. Txt file to figure start points for each slot.
+
+         // Mining Resources:
+
+         // Gold ore - #a9771d, #aba233, #645e1e, #656548
+         // Quartz - #b4a28c, #e2dcd3, #f4f2ef, #877a72
+         // Diamond - #9ff8e5, #1aa8a5, #49ead6, #2bddd5, #20c3b3, #1c8f98
+         // Coal - #261e24, #383d45, #252525, #1f1721, #101015
+         // Lapis - #335dc1, #1c52a6, #052462, #123f89, #052462
+         // Emerald - #17da61, #80f3ab, #007a18, #00a82b, #adfacb
+         // Redstone - #400500, #330605, #710000, #2c0000, #a80f01, #fc0000
+         // Netherite - #595659, #302829, #3a383a, #727072
+
+
+         // Food Stuff:
+         // Wheat - #d9b964, #8b763c, #cbaf58, #a49352
+         // Potato - #d6a850, #985400, #9b762d, #f5ce84
+         // Carrot - #fc8c09, #aa3800, #d0690d, #32bc2f
+         // Pumpkin - #854c0e, #4d2c08, #b26512, #5a370b
+         // Melon (Slice) -
+         // Beetroot - #a2272b, #dab3b5, #70160d, #be7178
+         // Sweet Berries - #a30700, #dc457d, #28512f, #370e0f
+         // Apple - #fc1c2a, #da1725, #b2131e, #742702
+         // Cod (Raw) - #966c4d, #d3c3ab, #c4a070, #af8752
+         // Tropical Fish - #f28847, #682d09, #e8ae8d, #ecbb9f
+         // Raw Salmon - #a93432, #4b5f50, #5c7663, #bb9089
+         // Raw Pork - #fc7676, #fc8a8a, #ec6f6f, #ec6f6f
+         // Raw Mutton - #cf2d26, #df7168, #ba2822, #460a06
+         // Raw Rabbit - #fbe2cf,  #b27763
+         // Raw Chicken - #efc7bb, #ecbaaa
+         // Red Mushroom - #fb2929, #c21d26, #cdc27d
+         // Brown Mushroom - #8f6c54, #ca9777
+
