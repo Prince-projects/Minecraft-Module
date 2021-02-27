@@ -3,7 +3,6 @@ import java.awt.image.BufferedImage;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
-// TODO -  Fix screenshot dimensions, finish colors and then you're fuckin done!
 public class MineCraft extends main{
      static void screenShot() throws AWTException, InterruptedException {
          /// Decs. First slot is 770, 1904 is second slot,
@@ -112,7 +111,7 @@ public class MineCraft extends main{
              // Setup
              int itemAmountTotal = 0;
              Scanner userInput = new Scanner(System.in);
-             System.out.println("Enter the item you want your slave to collect. Check the supported list of items for reference.");
+             System.out.println("Enter the item you want your person to collect. Check the supported list of items for reference.");
              String itemName = userInput.nextLine();
              System.out.println("How many of said item do they need to collect? Maximum of 576, or 9 slots of use.");
              int itemAmount = userInput.nextInt();
@@ -1186,16 +1185,19 @@ public class MineCraft extends main{
                              }
                              break;
                      }
+                     // Checks for the amount of filled slots.
                      for (int ii = 0; ii < slotState.length; ii++) {
                          if (slotState[ii]) {
                              trueCount++;
                          }
                      }
+                     // Factors the null cases.
                      for (String itemName : itemNames) { // Same as above for debug.
                          if (itemName.equals("null")) {
                              nullCases++;
                          }
                      }
+                     // Adds a score to the total score (cross-program interaction that won't make sense on the repo.
                      if (trueCount >= 9 - nullCases) {
                          main main = new main();
                          main.totalScore = main.totalScore + 1;
